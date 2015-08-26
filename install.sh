@@ -7,3 +7,6 @@ chsh -s /bin/zsh $(whoami)
 
 vim +PluginInstall +qall
 
+echo "trying to copy all dotfiles to root"
+
+cp -r ./* ~/
