@@ -1,4 +1,14 @@
-execute pathogen#infect()
+set rtp+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+
+Plugin 'morhetz/gruvbox'
+Plugin 'scrooloose/nerdtree'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'nvie/vim-flake8'
+
+call vundle#end()
+filetype plugin indent on
 
 imap jj <esc>
 
@@ -8,17 +18,16 @@ set expandtab
 
 syntax on
 
-filetype plugin indent on
 
 au FileType py set autoindent 
 au FileType py set smartindent
 au FileType py set textwidth=79 "PEP-8 Friendly"
 
 
-map <silent> <C-n> :NERDTreeToggle<CR>
 colorscheme gruvbox
 set background=dark
 set number
 
+map <silent> <C-n> :NERDTreeToggle<CR>
 highlight ExtraWhitespace ctermbg=red
 set mouse=a

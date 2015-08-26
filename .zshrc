@@ -1,5 +1,6 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
+#export TERM=screen-256color-bce
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -84,8 +85,9 @@ function delpyc() {
   pwd
   find . -name "*.pyc" -exec rm '{}' ';'
 }
+alias vim='TERM=screen-256color-bce vim'
+
 alias p="ipython"
 alias n="~/bin/ninja-ide/ninja-ide.py &"
 alias chromeos='sudo cgpt add -i 6 -P 0 -S 0 /dev/mmcblk0;sudo reboot'
-
 source /usr/local/bin/virtualenvwrapper.sh
