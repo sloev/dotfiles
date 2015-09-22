@@ -1,6 +1,5 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
-#export TERM=screen-256color-bce
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -53,10 +52,25 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 export PATH="/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/MacGPG2/bin:/$HOME/miniconda/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
-PROMPT="%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%1~ %{$reset_color%}$ "
+setopt prompt_subst
+ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}["
+ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[yellow]%}] %{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
+ZSH_THEME_GIT_PROMPT_CLEAN=""
 
-# You may need to manually set your language environment
+my_git_prompt() {
+    if [[ -d $(git rev-parse --show-toplevel 2>/dev/null) ]]; then
+        echo $(git_prompt_info)
+    else
+        echo ''
+    fi
+}
+local PS='$(my_git_prompt)'
+
+PROMPT="${PS}%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%1~ %{$reset_color%} "
+#PROMPT="$(git_custom_status)%{$fg[magenta]%}[%~% ]%{$reset_color%}%B$%b"
+
+    # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
@@ -85,9 +99,8 @@ function delpyc() {
   pwd
   find . -name "*.pyc" -exec rm '{}' ';'
 }
-alias vim='TERM=screen-256color-bce vim'
-
 alias p="ipython"
 alias n="~/bin/ninja-ide/ninja-ide.py &"
 alias chromeos='sudo cgpt add -i 6 -P 0 -S 0 /dev/mmcblk0;sudo reboot'
+alias tornado_tmux='TERM=screen-256color-bce tmux -S /tmp/shared_tmux attach'
 source /usr/local/bin/virtualenvwrapper.sh
