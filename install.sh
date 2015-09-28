@@ -2,7 +2,7 @@
 sudo apt-get install molly-guard vim python-setuptools tmux zsh
 echo "installing pip"
 sudo easy_install pip
-echo "pip installing ipython termcolor"
+echo "pip installing ipython termcolor virtualenvwrapper"
 sudo pip install ipython termcolor
 
 echo "changing shell to zsh"
