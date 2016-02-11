@@ -100,7 +100,6 @@ function delpyc() {
   find . -name "*.pyc" -exec rm '{}' ';'
 }
 alias p="ipython"
-alias n="~/bin/ninja-ide/ninja-ide.py &"
-alias chromeos='sudo cgpt add -i 6 -P 0 -S 0 /dev/mmcblk0;sudo reboot'
-alias tornado_tmux='TERM=screen-256color-bce tmux -S /tmp/shared_tmux attach'
 source /usr/local/bin/virtualenvwrapper.sh
+alias colorize="ccze -A | less +G -R"
+
