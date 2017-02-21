@@ -1,62 +1,52 @@
-# Path to your oh-my-zsh installation.
-export ZSH=$HOME/.oh-my-zsh
+# exports
+export TERM="xterm-256color"
+export PATH="/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin"
+export PYENV_VIRTUALENV_DISABLE_PROMPT=1
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="eastwood"
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+# sourcings
+if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    source ~/.zplug/init.zsh && zplug update --self
+fi
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+source ~/.zplug/init.zsh
+source /usr/local/bin/virtualenvwrapper.sh
+autoload colors && colors
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
+#plugins
+zplug "plugins/git",   from:oh-my-zsh
+zplug "lib/completion", from:oh-my-zsh
+zplug "lib/key-bindings", fªçrom:oh-my-zsh
+zplug "zsh-users/zsh-syntax-highlighting", from:github, defer:3
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
+fi
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-ZSH_CUSTOM=~/.oh-my-zsh/custom/
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git history python history-substring-search terminalapp brew nanoc zsh-syntax-highlighting virtuelenv)
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-export PATH="/opt/local/bin:/opt/local/sbin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/MacGPG2/bin:/$HOME/miniconda/bin"
+# prompt 
 setopt prompt_subst
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[yellow]%}["
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[yellow]%}] %{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[red]%}!"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
+
+# Determine active Python virtualenv details.
+function get_virtualenv () {
+  if [[ `pyenv version-name` == "system" ]] ; then
+      echo "%{$fg[white]%}(${$(python -V 2>&1):7})%{$reset_color%}"
+  else
+      echo "%{$fg[magenta]%}($(pyenv version-name))%{$reset_color%}"
+  fi
+}
 
 my_git_prompt() {
     if [[ -d $(git rev-parse --show-toplevel 2>/dev/null) ]]; then
@@ -65,41 +55,28 @@ my_git_prompt() {
         echo ''
     fi
 }
-local PS='$(my_git_prompt)'
 
-PROMPT="${PS}%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%1~ %{$reset_color%} "
-#PROMPT="$(git_custom_status)%{$fg[magenta]%}[%~% ]%{$reset_color%}%B$%b"
+local PGIT='$(my_git_prompt)'
+local PENV='$(get_virtualenv)'
 
-    # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+PROMPT="${PENV} ${PGIT}%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%1~ %{$reset_color%} >"
 
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+export PS1=$PROMPT
+export CLICOLOR=1
+export LSCOLORS=ExFxBxDxCxegedabagacad
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
+# functions
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 function delpyc() {
   echo "recursively removing .pyc files from this directory"
   pwd
   find . -name "*.pyc" -exec rm '{}' ';'
 }
-alias p="ipython"
-source /usr/local/bin/virtualenvwrapper.sh
-alias colorize="ccze -A | less +G -R"
 
+# alias
+#
+alias colorize="ccze -A | less +G -R"
+alias ls='ls -GFh'
+
+# init zplug
+zplug load
