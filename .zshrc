@@ -19,8 +19,9 @@ autoload colors && colors
 
 #plugins
 zplug "plugins/git",   from:oh-my-zsh
+zplug "lib/history",   from:oh-my-zsh
 zplug "lib/completion", from:oh-my-zsh
-zplug "lib/key-bindings", fªçrom:oh-my-zsh
+zplug "lib/key-bindings", from:oh-my-zsh
 zplug "zsh-users/zsh-syntax-highlighting", from:github, defer:3
 
 
@@ -59,7 +60,7 @@ my_git_prompt() {
 local PGIT='$(my_git_prompt)'
 local PENV='$(get_virtualenv)'
 
-PROMPT="${PENV} ${PGIT}%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%1~ %{$reset_color%} >"
+PROMPT="${PENV} ${PGIT}%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%1~ %{$reset_color%} > "
 
 export PS1=$PROMPT
 export CLICOLOR=1
@@ -77,6 +78,6 @@ function delpyc() {
 #
 alias colorize="ccze -A | less +G -R"
 alias ls='ls -GFh'
-
+alias fix_zplug="echo 'fixing zplug' && rm ~/.zplug/zcompdump && exec zsh"
 # init zplug
 zplug load
